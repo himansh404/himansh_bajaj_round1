@@ -29,7 +29,8 @@ app.post('/bfhl', (req, res) => {
         let alphabet_string = "";
 
         data.forEach(item => {
-            if (!isNaN(item) && item.trim() !== '') {
+            // Added a check for empty strings
+            if (!isNaN(item) && item.toString().trim() !== '') {
                 const num = Number(item);
                 sum += num;
                 if (num % 2 === 0) {
@@ -37,11 +38,11 @@ app.post('/bfhl', (req, res) => {
                 } else {
                     odd_numbers.push(item.toString());
                 }
-            } else if (/^[a-zA-Z]+$/.test(item)) {
+            } else if (typeof item === 'string' && /^[a-zA-Z]+$/.test(item)) {
                 alphabets.push(item.toUpperCase());
                 alphabet_string += item;
             } else {
-                special_characters.push(item);
+                special_characters.push(item.toString());
             }
         });
 
@@ -80,12 +81,6 @@ app.post('/bfhl', (req, res) => {
     }
 });
 
-// Start the server only if the file is run directly (for local development)
-if (require.main === module) {
-    app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
-    });
-}
-
-// Export the app for Vercel
-module.exports = app;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
