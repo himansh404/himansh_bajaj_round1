@@ -29,7 +29,7 @@ app.post('/bfhl', (req, res) => {
         let alphabet_string = "";
 
         data.forEach(item => {
-            if (!isNaN(item)) {
+            if (!isNaN(item) && item.trim() !== '') {
                 const num = Number(item);
                 sum += num;
                 if (num % 2 === 0) {
@@ -80,6 +80,12 @@ app.post('/bfhl', (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+// Start the server only if the file is run directly (for local development)
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+}
+
+// Export the app for Vercel
+module.exports = app;
